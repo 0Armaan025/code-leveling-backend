@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const ProjectLanguage = require("./ProjectLanguage");
+const Project = require("./Project");
 
 const userSchema = new mongoose.Schema({
     fullName: {
@@ -50,19 +52,16 @@ const userSchema = new mongoose.Schema({
         default: []
     },
     bestProject: {
-        type: String,
+        type: Project.schema,
         default: "No projects yet!"
     },
-    bestProjectUrl: {
-        type: String,
-        default: "No projects yet!"
-    },
+
     totalCodingTime: {
         type: Number,
         default: 0
     },
     projects: {
-        type: [String],
+        type: [Project.schema],
         default: []
     },
 });
