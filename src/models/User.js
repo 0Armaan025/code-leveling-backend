@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const ProjectLanguage = require("./ProjectLanguage");
 const Project = require("./Project");
+const Item = require("./Item");
+const bcrypt = require("bcryptjs");
+const Task = require("./Task")
 
 const userSchema = new mongoose.Schema({
     fullName: {
@@ -19,7 +22,8 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        match: [/^.{8,}$/, "Password must be at least 8 characters long"]
     },
     profileImageUrl: {
         type: String,
@@ -40,7 +44,7 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     tasks: {
-        type: [String],
+        type: [Task.schema],
         default: []
     },
     level: {
@@ -48,7 +52,7 @@ const userSchema = new mongoose.Schema({
         default: 1
     },
     items: {
-        type: [String],
+        type: [Item.schema],
         default: []
     },
     bestProject: {
@@ -65,5 +69,20 @@ const userSchema = new mongoose.Schema({
         default: []
     },
 });
+
+// if the user is not being created for the first time or JUST BEING UPDATED, we WON'T change the pass part.
+
+userSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) {
+        return next();
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+});
+
+userSchema.methods.comparePassword = async function (password) {
+    return await bcrypt.compare(password, this.password);
+};
 
 module.exports = mongoose.model("User", userSchema);
