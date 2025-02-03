@@ -22,6 +22,10 @@ const itemSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    quantity: {
+        type: Number,
+        default: 1
+    },
     status: {
         type: String,
         default: "Unavailable",

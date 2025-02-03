@@ -20,11 +20,7 @@ const userSchema = new mongoose.Schema({
         unique: true,
         match: [/.+\@.+\..+/, "Please fill a valid email address"]
     },
-    password: {
-        type: String,
-        required: true,
-        match: [/^.{8,}$/, "Password must be at least 8 characters long"]
-    },
+
     profileImageUrl: {
         type: String,
         required: true,
@@ -57,7 +53,14 @@ const userSchema = new mongoose.Schema({
     },
     bestProject: {
         type: Project.schema,
-        default: "No projects yet!"
+
+        default: {
+
+            projectName: "No project yet",
+            languages: [],
+            startedOn: Date.now(),
+            codingTime: 0
+        },
     },
 
     totalCodingTime: {
@@ -72,17 +75,6 @@ const userSchema = new mongoose.Schema({
 
 // if the user is not being created for the first time or JUST BEING UPDATED, we WON'T change the pass part.
 
-userSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) {
-        return next();
-    }
 
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-});
-
-userSchema.methods.comparePassword = async function (password) {
-    return await bcrypt.compare(password, this.password);
-};
 
 module.exports = mongoose.model("User", userSchema);

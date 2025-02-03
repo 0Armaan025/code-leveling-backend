@@ -4,6 +4,8 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 const userRoutes = require("./routes/userRoutes");
+const shopRoutes = require("./routes/shopRoutes");
+const inventoryRoutes = require("./routes/inventoryRoutes");
 
 
 const app = express();
@@ -29,6 +31,8 @@ mongoose
 // });
 
 app.use("/api/user", userRoutes);
+app.use("/api/inventory", inventoryRoutes);
+app.use("/api/shop", shopRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

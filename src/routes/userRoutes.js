@@ -3,13 +3,13 @@ const mongoose = require("mongoose"); // Make sure mongoose is imported
 const router = express.Router();
 
 const User = require("../models/User");
-const jwt = require("jsonwebtoken");
 
 
-const JWT_SECRET = process.env.JWT_SECRET;
+
+
 
 router.get("/", (req, res) => {
-    res.status(200).json({ message: "Getting all users from the database" });
+    res.status(200).json({ message: "Users 200 success!" });
 });
 
 
@@ -50,45 +50,6 @@ router.post("/register", async (req, res) => {
 });
 
 
-router.post("/login", async (req, res) => {
-    try {
-        const {email, password} = req.body;
-
-        const user = await User.findOne({ email });
-
-        if(!user) {
-            return res.status(400).json({
-                message: "Invalid email or password"
-            });
-
-            // no matter what you gotta say that either of both is invalid, not only email so user will know something, yk what i mean
-        }
-
-        const isMatch = await user.comparePassword(password, user.password);
-
-        if(!isMatch) {
-            return res.status(400).json({
-                message: "Invalid email or password"
-            });
-        }
-
-        const token = jwt.sign({userId: user._id}, JWT_SECRET, {expiresIn: process.env.JWT_EXPIRES_IN});
-
-        res.status(200).json({
-            message: "Login successful!",
-            token,
-            user: user
-        });
-    }
-    catch(e) {
-        console.error("Error:", e.message);
-        return res.status(500).json({
-            message: "User login failed!",
-            status: 500,
-            error: e.message, // Send the error message for debugging
-        });
-    }
-} );
 
 
 module.exports = router;
