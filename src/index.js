@@ -6,9 +6,12 @@ require("dotenv").config();
 const userRoutes = require("./routes/userRoutes");
 const shopRoutes = require("./routes/shopRoutes");
 const inventoryRoutes = require("./routes/inventoryRoutes");
+const taskRoutes = require('./routes/tasksRoute');
 
 
 const app = express();
+
+
 
 // Middleware
 app.use(cors());
@@ -33,6 +36,7 @@ mongoose
 app.use("/api/user", userRoutes);
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/shop", shopRoutes);
+app.use("/api/tasks", taskRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

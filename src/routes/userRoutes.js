@@ -4,10 +4,6 @@ const router = express.Router();
 
 const User = require("../models/User");
 
-
-
-
-
 router.get("/", (req, res) => {
     res.status(200).json({ message: "Users 200 success!" });
 });
@@ -49,7 +45,46 @@ router.post("/register", async (req, res) => {
     }
 });
 
+router.get("/get/:email", async (req, res) => {
+    try {
+        const { email } = req.params;
+        const user = await User.findOne({ email });
+        return res.status(200).json({ message: "User fetched successfully", user: user });
+    }
+    catch (e) {
+        return res.status(500).json({ message: "Error fetching user", error: e.message });
+    }
+});
+
+router.put("/update/:email", async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.params.email });
+        const userData = req.body;
+        user.set(userData);
+        const result = await user.save().then((message) => {
+            return res.status(200).json({ message: "User updated successfully", user: message });
+        });
 
 
+    }
+    catch (e) {
+        return res.status(500).json({ message: "Error updating user", error: e.message });
+    }
+});
+
+router.delete("/delete/:email", async (req, res) => {
+    try {
+        const user = await User.findOneAndDelete({ email: req.params.email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        return res.status(200).json({ message: "User deleted successfully", user: user });
+    }
+    catch (e) {
+        return res.status(500).json({ message: "Error deleting user", error: e.message });
+    }
+});
 
 module.exports = router;
