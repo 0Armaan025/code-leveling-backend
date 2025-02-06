@@ -3,7 +3,8 @@ const ProjectLanguage = require("./ProjectLanguage");
 const Project = require("./Project");
 const Item = require("./Item");
 const bcrypt = require("bcryptjs");
-const Task = require("./Task")
+const Task = require("./Task");
+const Achievement = require("./Achievement");
 
 const userSchema = new mongoose.Schema({
     fullName: {
@@ -69,6 +70,10 @@ const userSchema = new mongoose.Schema({
     },
     projects: {
         type: [Project.schema],
+        default: []
+    },
+    achievements: {
+        type: [Achievement.schema],
         default: []
     },
 });
