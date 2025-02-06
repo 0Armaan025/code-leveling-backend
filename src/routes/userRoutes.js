@@ -87,4 +87,21 @@ router.delete("/delete/:email", async (req, res) => {
     }
 });
 
+router.get('/check/:email', async (req, res) => {
+    try {
+        const { email } = req.params;
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        else {
+            return res.status(200).json({ message: "User found" });
+        }
+    }
+    catch (e) {
+        return res.status(500).json({ message: "Error checking user", error: e.message });
+    }
+});
+
 module.exports = router;

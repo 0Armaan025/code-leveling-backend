@@ -73,5 +73,4 @@ router.delete('/delete/:id', async (req, res) => {
     }
 });
 
-// TODO: FIX THE DELETE ROUTE
 module.exports = router;
