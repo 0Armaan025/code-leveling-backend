@@ -80,4 +80,22 @@ router.post("/add-shout-out/:email", async (req, res) => {
 
 });
 
+router.get("/get-shoutouts", async (req, res) => {
+    try {
+        const shoutOuts = await ShoutOut.find();
+        return res.status(200).json({
+            message: "Got all the shoutouts, 200!",
+            shoutOuts: shoutOuts,
+
+        }
+        );
+    }
+    catch (e) {
+        return res.status(500).json({
+            message: "Some error is there",
+            error: e.message,
+        });
+    }
+});
+
 module.exports = router;
