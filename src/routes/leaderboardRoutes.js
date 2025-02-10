@@ -98,4 +98,28 @@ router.get("/get-shoutouts", async (req, res) => {
     }
 });
 
+router.delete("/remove-shout-out/:id", async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const shoutOut = await ShoutOut.findById(id);
+        if (!shoutOut) {
+            return res.status(404).json({ message: "Shout out not found" });
+        }
+
+        const currentTime = new Date();
+        const shoutOutTime = new Date(shoutOut.createdAt);
+        const timeDifference = currentTime - shoutOutTime;
+
+        if (timeDifference > 24 * 60 * 60 * 1000) { // 24 hours in milliseconds
+            await ShoutOut.findByIdAndDelete(id);
+            return res.status(200).json({ message: "Shout out removed successfully" });
+        } else {
+            return res.status(400).json({ message: "Shout out cannot be removed before 24 hours" });
+        }
+    } catch (e) {
+        return res.status(500).json({ message: "Error removing shout out", error: e.message });
+    }
+});
+
 module.exports = router;
