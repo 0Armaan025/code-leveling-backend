@@ -63,6 +63,11 @@ const userSchema = new mongoose.Schema({
             codingTime: 0
         },
     },
+    accountType: {
+        type: String,
+        default: "public",
+        required: true
+    },
 
     totalCodingTime: {
         type: Number,
