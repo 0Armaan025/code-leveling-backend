@@ -5,6 +5,7 @@ const Item = require("./Item");
 const bcrypt = require("bcryptjs");
 const Task = require("./Task");
 const Achievement = require("./Achievement");
+const Notification = require("./Notification");
 
 const userSchema = new mongoose.Schema({
     fullName: {
@@ -38,7 +39,6 @@ const userSchema = new mongoose.Schema({
     streak: {
         type: Number,
         default: 0,
-        required: true
     },
     tasks: {
         type: [Task.schema],
@@ -66,7 +66,7 @@ const userSchema = new mongoose.Schema({
     accountType: {
         type: String,
         default: "public",
-        required: true
+        
     },
 
     totalCodingTime: {
@@ -81,6 +81,10 @@ const userSchema = new mongoose.Schema({
         type: [Achievement.schema],
         default: []
     },
+    notifications: {
+        type: [Notification.schema],
+        default: []
+    }
 });
 
 // if the user is not being created for the first time or JUST BEING UPDATED, we WON'T change the pass part.
