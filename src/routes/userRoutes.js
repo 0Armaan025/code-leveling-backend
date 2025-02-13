@@ -10,6 +10,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 const User = require("../models/User");
 
 router.get("/", (req, res) => {
+
     res.status(200).json({ message: "Users 200 success!" });
 });
 
@@ -28,7 +29,8 @@ router.post('/register', upload.single('image'), async (req, res) => {
         let profileImageUrl = '';
 
         if (req.file) {
-            const apiKey = 'xxx'; // Replace with your ImgBB API key
+
+            const apiKey = process.env.IMGBB_UPLOAD_KEY;
             const buffer = req.file.buffer;
             const base64Image = buffer.toString('base64');
 
