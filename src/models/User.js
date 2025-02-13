@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
 
     profileImageUrl: {
         type: String,
-        required: true,
+        required: false,
         match: [/^(http|https):\/\/[^ "]+$/, "Please provide a valid URL"]
     },
     date: {
@@ -66,7 +66,7 @@ const userSchema = new mongoose.Schema({
     accountType: {
         type: String,
         default: "public",
-        
+
     },
 
     totalCodingTime: {

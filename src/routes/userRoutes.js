@@ -1,6 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose"); // Make sure mongoose is imported
 const router = express.Router();
+const multer = require('multer');
+const imgbbUploader = require('imgbb-uploader');
+
+const upload = multer({ storage: multer.memoryStorage() });
+
 
 const User = require("../models/User");
 
@@ -9,42 +14,55 @@ router.get("/", (req, res) => {
 });
 
 
-router.post("/register", async (req, res) => {
+router.post('/register', upload.single('image'), async (req, res) => {
     try {
         const existingUser = await User.findOne({ email: req.body.email });
 
         if (existingUser) {
             return res.status(400).json({
-                message: "Email already exists!",
+                message: 'Email already exists!',
                 status: 400,
             });
         }
 
-        let userData = req.body;
-        let user = new User(userData);
-        user._id = new mongoose.Types.ObjectId(); // Use mongoose correctly
+        let profileImageUrl = '';
 
+        if (req.file) {
+            const apiKey = 'xxx'; // Replace with your ImgBB API key
+            const buffer = req.file.buffer;
+            const base64Image = buffer.toString('base64');
 
-        console.log("New User:", user);
+            const response = await imgbbUploader({
+                apiKey: apiKey,
+                base64string: base64Image,
+            });
+
+            profileImageUrl = response.url;
+        }
+
+        const userData = {
+            ...req.body,
+            profileImageUrl, // This will be either the uploaded image URL or an empty string
+        };
+
+        const user = new User(userData);
 
         await user.save();
 
         return res.status(201).json({
-            message: "User registration is successful!",
+            message: 'User registration is successful!',
             status: 201,
             user: user,
         });
-
     } catch (error) {
-        console.error("Error:", error.message);
+        console.error('Error:', error.message);
         return res.status(500).json({
-            message: "User registration failed!",
+            message: 'User registration failed!',
             status: 500,
-            error: error.message, // Send the error message for debugging
+            error: error.message,
         });
     }
 });
-
 router.get("/get/:email", async (req, res) => {
     try {
         const { email } = req.params;
