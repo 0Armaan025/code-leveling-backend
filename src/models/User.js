@@ -84,7 +84,17 @@ const userSchema = new mongoose.Schema({
     notifications: {
         type: [Notification.schema],
         default: []
+    },
+    logs: {
+        type: Map,
+        of: Number,
+        default: {}
+    },
+    apiKey: {
+        type: String,
+        default: "",
     }
+
 });
 
 // if the user is not being created for the first time or JUST BEING UPDATED, we WON'T change the pass part.

@@ -10,6 +10,7 @@ const taskRoutes = require('./routes/tasksRoute');
 const leaderboardRoutes = require("./routes/leaderboardRoutes");
 const solutionRoute = require("./routes/solutionRoute");
 const notificationRoutes = require("./routes/notificationRoutes");
+const logRoutes = require("./routes/logRoutes");
 
 const app = express();
 
@@ -40,8 +41,10 @@ app.use("/api/inventory", inventoryRoutes);
 app.use("/api/shop", shopRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
-app.use('/api/solutions/', solutionRoute);
-app.use('/api/notifications/', notificationRoutes);
+app.use('/api/solutions', solutionRoute);
+app.use('/api/notifications', notificationRoutes);
+app.use("/api/logs", logRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
